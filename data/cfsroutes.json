@@ -1,0 +1,16 @@
+[
+  {
+    "dep": "CYYZ",
+    "arr": "KORD",
+    "aircraftGroup": "JET",
+    "level": "H&L",
+    "route": "GOPUP DEP HOCKE FNT WYNDE ARR"
+  },
+  {
+    "dep": "CYYZ",
+    "arr": "KORD",
+    "aircraftGroup": "NONJET",
+    "level": "H&L",
+    "route": "TULEK DEP HOCKE FNT WYNDE ARR"
+  }
+]
