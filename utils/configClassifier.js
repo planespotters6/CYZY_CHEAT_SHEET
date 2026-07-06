@@ -1,7 +1,9 @@
 function classifyConfig(parsed) {
   const arrivals = parsed.arrivals || [];
+  const departures = parsed.departures || [];
   const text = parsed.rawText || "";
 
+  // PRISEC always wins first
   if (
     parsed.hasPrimarySecondary ||
     (
@@ -12,14 +14,35 @@ function classifyConfig(parsed) {
     return "PRISEC";
   }
 
-  if (arrivals.length >= 3) return "TRIPLES";
-  if (arrivals.length === 2) return "DUALS";
-  if (arrivals.length === 1) return "SINGLES";
+  // count every unique runway actually being used
+  const activeRunways = [
+    ...new Set([
+      ...arrivals,
+      ...departures
+    ])
+  ];
+
+  if (activeRunways.length >= 3) {
+    return "TRIPLES";
+  }
+
+  if (activeRunways.length === 2) {
+    return "DUALS";
+  }
+
+  if (activeRunways.length === 1) {
+    return "SINGLES";
+  }
 
   return "UNKNOWN";
 }
 
-function makeDisplay(config, arrivals, departures) {
+
+function makeDisplay(
+  config,
+  arrivals,
+  departures
+) {
   const arrText = arrivals.length
     ? arrivals.join(", ")
     : "UNKNOWN";
@@ -32,11 +55,15 @@ function makeDisplay(config, arrivals, departures) {
     `${config} — ARR ${arrText} — DEP ${depText}`;
 
   if (oneLine.length > 55) {
-    return `${config} — ARR ${arrText}\nDEP ${depText}`;
+    return (
+      `${config} — ARR ${arrText}\n` +
+      `DEP ${depText}`
+    );
   }
 
   return oneLine;
 }
+
 
 module.exports = {
   classifyConfig,
